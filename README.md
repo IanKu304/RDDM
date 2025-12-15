@@ -15,7 +15,7 @@ This repository contains official code for the Residual Diffusion Denoising Mode
 ```bash
 git clone https://github.com/IanKu304/RDDM
 cd RDDM
-git remote add upstream <ORIGINAL_RDDM_URL>
+git remote add upstream https://github.com/nachifur/RDDM
 git fetch upstream
 ```
 
