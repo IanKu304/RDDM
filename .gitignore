@@ -1,11 +1,17 @@
-# Ignore Datasets
+# Ignore Datasets (repo內只保留 data/README.md 或 .gitkeep)
+data/*
+!data/README.md
+!data/.gitkeep
+
+# Ignore archives
 *.zip
 *.tar.gz
-data/
+
+# Ignore optional dataset mirrors
 datasets/GT-RAIN/
 experiments/2_Image_Restoration_deraing_raindrop_noise1/data/
 
-# Ignore Checkpoints and Logs (避免上傳訓練權重和Log)
+# Ignore checkpoints and logs
 *.pth
 *.pt
 *.log
