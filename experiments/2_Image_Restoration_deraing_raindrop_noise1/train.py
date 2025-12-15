@@ -6,6 +6,21 @@ from src.residual_denoising_diffusion_pytorch import (ResidualDiffusion,
                                                       Trainer, Unet, UnetRes,
                                                       set_seed)
 
+# ==========================================
+#  新增一個小工具來讀取 .flist 檔案
+# ==========================================
+def read_flist(flist_path):
+    """讀取 flist 檔案並回傳圖片路徑列表"""
+    if not os.path.exists(flist_path):
+        raise FileNotFoundError(f"找不到檔案: {flist_path}")
+    
+    with open(flist_path, 'r') as f:
+        # 讀取每一行並去除前後空白
+        lines = [line.strip() for line in f.readlines()]
+    
+    print(f"✅ 已讀取 {len(lines)} 張圖片路徑自: {os.path.basename(flist_path)}")
+    return lines
+
 # init 
 os.environ['CUDA_VISIBLE_DEVICES'] = ','.join(str(e) for e in [0])
 sys.stdout.flush()
@@ -44,14 +59,31 @@ if condition:
                 "/home/liu/disk12t/liu_data/shadow_removal_with_val_dataset/ISTD_Dataset_arg/data_val/ISTD_shadow_test.flist",
                 "/home/liu/disk12t/liu_data/shadow_removal_with_val_dataset/ISTD_Dataset_arg/data_val/ISTD_mask_test.flist"]
     else:
-        folder = ["/home/ljw/data-set/program/diffusion/dataset/deraing_raindrop/raindrop_data/train_gt.flist",
-                "/home/ljw/data-set/program/diffusion/dataset/deraing_raindrop/raindrop_data/train_input.flist",
-                "/home/ljw/data-set/program/diffusion/dataset/deraing_raindrop/raindrop_data/test_gt.flist",
-                "/home/ljw/data-set/program/diffusion/dataset/deraing_raindrop/raindrop_data/test_input.flist"]
-    train_batch_size = 1
+        # folder = ["/home/ljw/data-set/program/diffusion/dataset/deraing_raindrop/raindrop_data/train_gt.flist",
+        #         "/home/ljw/data-set/program/diffusion/dataset/deraing_raindrop/raindrop_data/train_input.flist",
+        #         "/home/ljw/data-set/program/diffusion/dataset/deraing_raindrop/raindrop_data/test_gt.flist",
+        #         "/home/ljw/data-set/program/diffusion/dataset/deraing_raindrop/raindrop_data/test_input.flist"]# [修改] 這裡改用剛剛生成的 val_gt.flist 和 val_input.flist
+        base_path = "/app/experiments/2_Image_Restoration_deraing_raindrop_noise1/datasets/GT-RAIN"
+        
+        # 【關鍵修改】: 先用 read_flist 把路徑讀出來變成 list
+        print("正在讀取資料集清單...")
+        train_gt_list = read_flist(os.path.join(base_path, "train_gt.flist"))
+        train_input_list = read_flist(os.path.join(base_path, "train_input.flist"))
+        val_gt_list = read_flist(os.path.join(base_path, "val_gt.flist"))
+        val_input_list = read_flist(os.path.join(base_path, "val_input.flist"))
+
+        # 把讀好的圖片列表(list) 傳給 folder，而不是傳檔案路徑(string)
+        folder = [
+            train_gt_list,     # 訓練集 GT (圖片列表)
+            train_input_list,  # 訓練集 Input (圖片列表)
+            val_gt_list,       # 驗證集 GT
+            val_input_list     # 驗證集 Input
+        ]
+
+    train_batch_size = 2
     num_samples = 1
     sum_scale = 1
-    image_size = 256
+    image_size = 128
 else:
     folder = '/home/liu/disk12t/liu_data/dataset/CelebA/img_align_celeba'
     train_batch_size = 32
@@ -114,7 +146,8 @@ trainer = Trainer(
 if not trainer.accelerator.is_local_main_process:
     pass
 else:
-    trainer.load(80)
+    # trainer.load(80)  <-- 註解掉這一行，因為我們是從頭訓練
+    print("Starting new training...")
 
 # train
 trainer.train()

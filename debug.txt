@@ -1,0 +1,4 @@
+Collecting flash-attn==1.0.2
+  Using cached flash_attn-1.0.2.tar.gz (2.0 MB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'error'
