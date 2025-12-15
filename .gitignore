@@ -1,0 +1,13 @@
+# Ignore Datasets
+*.zip
+*.tar.gz
+data/
+datasets/GT-RAIN/
+experiments/2_Image_Restoration_deraing_raindrop_noise1/data/
+
+# Ignore Checkpoints and Logs (避免上傳訓練權重和Log)
+*.pth
+*.pt
+*.log
+experiments/**/results/
+experiments/**/training.log
