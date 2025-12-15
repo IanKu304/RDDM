@@ -10,6 +10,11 @@ import multiprocessing as mp
 
 
 def main():
+    import torch
+    torch.backends.cudnn.benchmark = True
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
+
     #init 
     os.environ['CUDA_VISIBLE_DEVICES'] = ','.join(str(e) for e in [0])
     sys.stdout.flush()
@@ -118,7 +123,8 @@ def main():
         train_num_steps=train_num_steps,         # total training steps
         gradient_accumulate_every=2,    # gradient accumulation steps
         ema_decay=0.995,                # exponential moving average decay
-        amp=False,                        # turn on mixed precision
+        amp=True,                        # turn on mixed precision
+        #apm = False,
         convert_image_to="RGB",
         condition=condition,
         save_and_sample_every=save_and_sample_every,
@@ -127,10 +133,20 @@ def main():
         generation = False
     )
 
-    if not trainer.accelerator.is_local_main_process:
+    '''if not trainer.accelerator.is_local_main_process:
         pass
     else:
-        trainer.load(80)
+        trainer.load(80)'''
+
+    # 由環境變數決定要不要 resume（例如 RESUME_STEP=80）
+    resume_step = os.environ.get("RESUME_STEP", "").strip()
+
+    if trainer.accelerator.is_local_main_process and resume_step:
+        try:
+            trainer.load(int(resume_step))
+            print(f"[INFO] Resumed from step {resume_step}")
+        except FileNotFoundError:
+            print(f"[WARN] Checkpoint step {resume_step} not found. Start from scratch.")
 
     # train
     trainer.train()

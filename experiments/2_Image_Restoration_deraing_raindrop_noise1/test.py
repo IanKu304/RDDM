@@ -143,12 +143,31 @@ def main():
     if not trainer.accelerator.is_local_main_process:
         pass
     else:
-        trainer.load(140)
+        '''trainer.load(140)
         trainer.set_results_folder('./results/test_timestep_140pt_'+str(5))
-        trainer.test(last=True)
+        trainer.test(last=True)'''
 
     # trainer.set_results_folder('./results/test_sample')
     # trainer.test(sample=True)
+
+    
+    # TEST_STEP：指定要測哪個 checkpoint step（例如 80 或 120）
+    test_step = os.environ.get("TEST_STEP", "").strip()
+
+    if trainer.accelerator.is_local_main_process:
+        if test_step:
+            try:
+                trainer.load(int(test_step))
+                print(f"[INFO] Testing checkpoint step {test_step}")
+            except FileNotFoundError:
+                raise FileNotFoundError(f"Checkpoint step {test_step} not found. Set TEST_STEP correctly.")
+        else:
+            # 沒指定就不要自動 load，避免大家測到不同的 step
+            print("[WARN] TEST_STEP not set. Skip loading checkpoint for testing.")
+            return
+
+        trainer.set_results_folder('./results/test_timestep_' + str(sampling_timesteps) + f"_ckpt{test_step}")
+        trainer.test(last=True)
 
 
 
