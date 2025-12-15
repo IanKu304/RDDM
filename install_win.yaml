@@ -1,0 +1,36 @@
+name: rddm
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  # Keep NumPy < 2 to avoid deprecated aliases (np.str / np.int / etc.) in older research code
+  - numpy<2
+  - scipy
+  - pillow
+  - opencv
+  - tqdm
+  - pyyaml
+  - scikit-image
+  - scikit-learn
+  - pandas
+  - matplotlib
+  - pip:
+      # Core training utilities
+      - accelerate>=0.24
+      - einops>=0.7
+      - ema-pytorch>=0.5
+      - Augmentor
+      - lmdb
+      - tensorboard
+      # Optional utilities (usually safe; remove if you want a minimal env)
+      - yacs
+      - natsort
+      - json-tricks
+      - portalocker
+      - prettytable
+      - thop
+      - typeguard
+      - colorama
+      - exceptiongroup

@@ -1,0 +1,39 @@
+name: rddm
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  # ---------- core ----------
+  - python=3.10
+  - pip>=23
+  - numpy<2
+  - tqdm
+  - pyyaml
+  - pillow
+  - scipy
+  - matplotlib
+  - opencv  # use conda-forge build (server/headless friendly)
+
+  # ---------- PyTorch (CUDA 11.8) ----------
+  # If your driver is too old for CUDA 11.8, change pytorch-cuda to 11.7/11.6
+  - pytorch>=2.1
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=11.8
+
+  # ---------- common utilities ----------
+  - pip:
+      # training runtime
+      - accelerate>=0.30
+      - ema-pytorch>=0.4
+      - einops>=0.7
+      - Augmentor
+      - lmdb
+
+      # optional: logging / metrics / eval (safe to keep)
+      - tensorboard
+      - lpips
+      - pytorch-fid
+      - scikit-image
+      - imageio

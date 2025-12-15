@@ -1,115 +1,292 @@
-# Residual Denoising Diffusion Models
+# Residual Diffusion Denoising Model (RDDM)
 
-[paper](https://openaccess.thecvf.com/content/CVPR2024/html/Liu_Residual_Denoising_Diffusion_Models_CVPR_2024_paper.html)|[arxiv](https://arxiv.org/abs/2308.13712)|[youtube](https://www.youtube.com/watch?v=E-ObZs32fEU)|[blog](https://twitter.com/nachifur/status/1762730191707881537)|[中文论文(ao9l)](https://rec.ustc.edu.cn/share/60cb4770-1b6a-11ef-8e9e-332aeb6c199a)|[中文视频](https://cmdr.com.cn/lectureHall/lectureRoomDetail?liveUid=58e63bb51116d7c01f37dfee1354b043)|[中文博客](https://www.zhihu.com/question/645935461/answer/3410873004)
+This repository contains official code for the Residual Diffusion Denoising Model (RDDM) experiments, and **our group’s reproduction pipeline** for **GT-RAIN** (deraining) with **alpha/beta schedule ablation** and **FID comparison**.
 
-This repository is the official implementation of Residual Denoising Diffusion Models.
+> Notes for our course / group report:
+> - We **do not commit** datasets, checkpoints, or experiment results to GitHub.
+> - Everyone downloads the shared `data.zip` from Drive and **unzips to `RDDM/data/`** locally.
+> - We recommend **Windows + Anaconda** setup below (works with CUDA 11.8 PyTorch wheels).
 
-<p align="center">
-<a href="https://cvpr.thecvf.com/virtual/2024/poster/31373" target="_blank">
-<img width="800" height="400" img align="center" alt="RDDM" src="https://github.com/nachifur/RDDM/blob/main/poster/Jiawei_9969.png" />
-</a>
-</p>
+---
 
-## Requirements
+## 0) Git & collaboration (CLI + GitHub Desktop)
 
-To install requirements: ([If an error occurs, you may need to install the packages one by one](https://github.com/nachifur/RDDM/issues/41#issuecomment-2477808693).)
-
-```
-conda env create -f install.yaml
-```
-
-
-## Dataset
-
-[Raindrop](https://github.com/rui1996/DeRaindrop) ([test-a for test](https://github.com/rui1996/DeRaindrop))
-
-[GoPro](https://github.com/swz30/MPRNet/blob/main/Deblurring/Datasets/README.md)
-
-[ISTD](https://github.com/DeepInsight-PCALab/ST-CGAN)
-
-SID-RGB: [kexu](https://kkbless.github.io/) or [download](https://drive.google.com/drive/folders/1-psXDjeW4FiRdLjc9idABsxGPo1Kn1jR)
-
-[LOL](https://daooshee.github.io/BMVC2018website/)
-
-[CelebA](https://github.com/nachifur/RDDM/issues/8#issuecomment-1978889073)
-
-## Training
-
-To train RDDM, run this command:
-
-```train
-cd experiments/xxxx
-python train.py
-```
-or
-```train
-accelerate launch train.py
+### 0.1 Clone (CLI)
+```bash
+git clone <YOUR_FORK_URL>
+cd RDDM
+git remote add upstream <ORIGINAL_RDDM_URL>
+git fetch upstream
 ```
 
-## Evaluation
+### 0.2 Clone (GitHub Desktop)
+1. **File → Clone repository…**
+2. Select your fork, choose local path, click **Clone**.
+3. If you need to add `upstream`: **Repository → Repository settings → Remote**.
 
-To evaluate image generation, run:
+### 0.3 Ignore datasets / checkpoints (required)
+We keep datasets under `RDDM/data/` and ignore them via `.gitignore`.
 
-```eval
-cd eval/image_generation_eval/
-python fid_and_inception_score.py path_of_gen_img
+Recommended `.gitignore` (already validated: `git status --ignored` shows `data/` as ignored):
+```gitignore
+# Ignore Datasets
+*.zip
+*.tar.gz
+data/
+datasets/GT-RAIN/
+experiments/2_Image_Restoration_deraing_raindrop_noise1/data/
+
+# Ignore Checkpoints and Logs
+*.pth
+*.pt
+*.log
+experiments/**/results/
+experiments/**/training.log
 ```
 
-For image restoration, MATLAB evaluation codes in `./eval`.
+Commit `.gitignore` changes:
 
-## Pre-trained Models
-
-[The pre-trained models (two unets, deresidual+denoising)](https://rec.ustc.edu.cn/share/3d8d9200-4e7e-11ef-b0ee-250e7e41f368) for [partially path-independent generation process](https://github.com/nachifur/RDDM/tree/main/experiments/0_Partially_path-independent_generation).
-
-## Results
-
-See Table 3 in main paper.
-
-**For image restoration:**
-
-[Raindrop](https://rec.ustc.edu.cn/share/c20ea640-4e7e-11ef-b29e-b1b12149494a)
-
-[GoPro](https://rec.ustc.edu.cn/share/f9deffc0-4e7e-11ef-b4dd-b51790f24839)
-
-[ISTD](https://rec.ustc.edu.cn/share/da867b10-4e7e-11ef-b21d-b3131e611f52)
-
-[LOL](https://rec.ustc.edu.cn/share/e9c00ab0-4e7e-11ef-89a0-292c4c37c153)
-
-[SID-RGB](https://rec.ustc.edu.cn/share/b213c330-4e7e-11ef-9b3e-957f50ca7d9b)
-
-
-**For image generation (on the CelebA dataset):**
-
-We can convert a pre-trained DDIM to RDDM by coefficient transformation (see [1_Image_Generation_convert_pretrained_DDIM_to_RDDM](https://github.com/nachifur/RDDM/tree/main/experiments/1_Image_Generation_convert_pretrained_DDIM_to_RDDM)).
-
-## Experiments 
-https://github.com/nachifur/RDDM/tree/main/experiments
-
-[0_**Partially_path-independent**_generation](https://github.com/nachifur/RDDM/tree/main/experiments/0_Partially_path-independent_generation)
-
-[1_Image_Generation_convert_pretrained_**DDIM_to_RDDM**](1_Image_Generation_convert_pretrained_DDIM_to_RDDM)
-
-[2_**Image_Restoration**_deraing_raindrop_noise1](https://github.com/nachifur/RDDM/tree/main/experiments/2_Image_Restoration_deraing_raindrop_noise1)
-
-[3_**Automatic-Objective-Selection-Algorithm**_test_lol_timestep5_1e-2_reinit_weight](https://github.com/nachifur/RDDM/tree/main/experiments/3_AOSA_test_lol_timestep5_1e-2_reinit_weight)
-
-[4_**Image_Inpainting**_imgsize64_batch64_pred_res_noise_centermask_wo_mask_wo_input](https://github.com/nachifur/RDDM/tree/main/experiments/4_Image_Inpainting_imgsize64_batch64_pred_res_noise_centermask_wo_mask_wo_input)
-
-[5_**Image_translation**_dog_to_cat_wo_input_imgsize64_batch64_pred_res_noise](https://github.com/nachifur/RDDM/tree/main/experiments/5_Image_translation_dog_to_cat_wo_input_imgsize64_batch64_pred_res_noise)
-
-[6_**Image_Generation**_table2_decreased_alpha_increased_beta](https://github.com/nachifur/RDDM/tree/main/experiments/6_Image_Generation_table2_decreased_alpha_increased_beta)
-
-## Citation
-If you find our work useful in your research, please consider citing:
+**CLI**
+```bash
+git add .gitignore
+git commit -m "Update .gitignore: ignore datasets, checkpoints, logs"
+git push
 ```
-@InProceedings{Liu_2024_CVPR,
-    author    = {Liu, Jiawei and Wang, Qiang and Fan, Huijie and Wang, Yinong and Tang, Yandong and Qu, Liangqiong},
-    title     = {Residual Denoising Diffusion Models},
-    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-    month     = {June},
-    year      = {2024},
-    pages     = {2773-2783}
-}
+
+**GitHub Desktop**
+1. Open repo → **Changes**
+2. Stage `.gitignore`
+3. Commit message → **Commit to main**
+4. **Push origin**
+
+---
+
+## 1) Environment setup (Windows + Anaconda, recommended)
+
+### 1.1 Create environment
+From repo root:
+```bash
+conda env create -f install_win.yaml -n rddm
+conda activate rddm
+python -m pip install -U pip setuptools wheel
 ```
-## Contact
-Please contact Jiawei Liu (liujiawei18@mails.ucas.ac.cn) or Liangqiong Qu (https://liangqiong.github.io/) if there is any question.
+
+### 1.2 Install PyTorch (CUDA 11.8)
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+
+Verify:
+```bash
+python -c "import torch; print(torch.__version__); print('cuda?', torch.cuda.is_available())"
+```
+
+### 1.3 Known missing packages (if you see ModuleNotFoundError)
+```bash
+pip install ema-pytorch Augmentor lmdb
+```
+
+Optional (IPython warnings on Windows):
+```bash
+pip install colorama exceptiongroup
+```
+
+---
+
+## 2) Dataset (GT-RAIN)
+
+### 2.1 Download
+- Official page: https://visual.ee.ucla.edu/gt_rain.htm/
+- We used HF mirror:
+```bash
+git clone https://huggingface.co/datasets/hwdz15508/GT-RAIN
+```
+
+### 2.2 Place dataset under `RDDM/data/`
+Your local structure should look like:
+```
+RDDM/
+  data/
+    GT-RAIN_train/   (unzipped)
+    GT-RAIN_val/     (unzipped)
+    GT-RAIN_test/    (unzipped)
+```
+
+Group workflow:
+1. One person unzips everything into `RDDM/data/`
+2. Zip the `data/` folder → upload to Drive
+3. Everyone else downloads and unzips into their own `RDDM/data/`
+
+### 2.3 Create paired filelists (.flist)
+The deraining experiment reads paired lists:
+- `train_input.flist`: rainy image paths
+- `train_gt.flist`: clean image paths
+- `test_input.flist`, `test_gt.flist`
+
+Create:
+```
+RDDM/data/gt_rain_flists/
+  train_input.flist
+  train_gt.flist
+  test_input.flist
+  test_gt.flist
+```
+
+**Suggested script (save as `tools/make_gtrain_flists.py`)**:
+```python
+import argparse, os
+from pathlib import Path
+
+def list_pngs(p): return sorted([x for x in Path(p).rglob("*.png")])
+
+def main(data_root, out_dir, train_dir="GT-RAIN_train", test_dir="GT-RAIN_test"):
+    data_root = Path(data_root)
+    out_dir = Path(out_dir); out_dir.mkdir(parents=True, exist_ok=True)
+
+    def build_split(split_dir):
+        rainy = []
+        clean = []
+
+        for img in list_pngs(data_root / split_dir):
+            name = img.name
+            # rainy frames contain "-R-"
+            if "-R-" in name:
+                rainy.append(str(img))
+                # training/test: assume clean is "*-C-000.png" in the same folder
+                clean_name = name.replace("-R-", "-C-").split("-C-")[0] + "-C-000.png"
+                clean_path = img.with_name(clean_name)
+                clean.append(str(clean_path))
+        return rainy, clean
+
+    tr_in, tr_gt = build_split(train_dir)
+    te_in, te_gt = build_split(test_dir)
+
+    (out_dir / "train_input.flist").write_text("\n".join(tr_in), encoding="utf-8")
+    (out_dir / "train_gt.flist").write_text("\n".join(tr_gt), encoding="utf-8")
+    (out_dir / "test_input.flist").write_text("\n".join(te_in), encoding="utf-8")
+    (out_dir / "test_gt.flist").write_text("\n".join(te_gt), encoding="utf-8")
+
+    print("Saved:", out_dir)
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--data_root", default="data")
+    ap.add_argument("--out_dir", default="data/gt_rain_flists")
+    args = ap.parse_args()
+    main(args.data_root, args.out_dir)
+```
+
+Run from repo root:
+```bash
+python tools/make_gtrain_flists.py --data_root data --out_dir data/gt_rain_flists
+```
+
+---
+
+## 3) Configure experiment path (IMPORTANT)
+
+Go to:
+```
+experiments/2_Image_Restoration_deraing_raindrop_noise1/train.py
+```
+
+Find the `folder = [...]` list and replace it with your local `.flist` paths.
+
+Recommended Windows-safe version:
+```python
+import os
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+FLIST_DIR = os.path.join(ROOT, "data", "gt_rain_flists")
+
+folder = [
+    os.path.join(FLIST_DIR, "train_gt.flist"),
+    os.path.join(FLIST_DIR, "train_input.flist"),
+    os.path.join(FLIST_DIR, "test_gt.flist"),
+    os.path.join(FLIST_DIR, "test_input.flist"),
+]
+```
+
+---
+
+## 4) Windows multiprocessing fix (MUST do before training)
+
+On Windows, PyTorch DataLoader uses `spawn`. If `train.py` is not guarded, you may see:
+
+> RuntimeError: An attempt has been made to start a new process before the current process has finished its bootstrapping phase…
+
+Fix: wrap the training entrypoint with `if __name__ == "__main__":`.
+
+At the bottom of `train.py`, change to:
+
+```python
+def main():
+    # ---- keep the original code that builds model/trainer here ----
+    trainer.train()
+
+if __name__ == "__main__":
+    from multiprocessing import freeze_support
+    freeze_support()
+    main()
+```
+
+If you still get worker crashes, set DataLoader workers to 0 (search in `src/residual_denoising_diffusion_pytorch.py` for `DataLoader(` and set `num_workers=0` for Windows).
+
+---
+
+## 5) Train (Deraining, GT-RAIN)
+
+From the experiment folder:
+```bash
+cd experiments/2_Image_Restoration_deraing_raindrop_noise1
+python train.py 10
+```
+
+- The `10` is typically used as **sampling timesteps** in the provided script.
+- Batch size is defined in `train.py` via `train_batch_size = ...`.
+
+Outputs are saved under the experiment’s `results/` folder (ignored by git).
+
+---
+
+## 6) Evaluate / Test (optional)
+If the experiment includes `test.py`:
+```bash
+python test.py
+```
+
+For metrics:
+- PSNR / SSIM scripts are under `eval/deraining_eval/`
+- FID script is under `eval/image_generation_eval/fid_and_inception_score.py`
+
+---
+
+## 7) Common troubleshooting
+
+### 7.1 `PackagesNotFoundError` when `conda env create -f install.yaml`
+Cause: original `install.yaml` is a **Linux-pinned** environment file; use `install_win.yaml` on Windows.
+
+### 7.2 `No module named 'ema_pytorch' / 'Augmentor' / 'lmdb'`
+```bash
+pip install ema-pytorch Augmentor lmdb
+```
+
+### 7.3 NumPy `np.str` warning / incompatibility
+If you see warnings (or errors on NumPy 2.x), prefer:
+- Pin NumPy `< 2` (already in `install_win.yaml`), or
+- Patch `datasets/base.py`: replace `dtype=np.str` with `dtype=str` or `dtype=np.str_`.
+
+### 7.4 DataLoader worker exited unexpectedly (Windows)
+Apply Section 4 fix, then retry. If needed:
+- set `num_workers=0`.
+
+---
+
+## 8) Reproduction: alpha/beta schedule ablation + FID
+For our report, we vary:
+- **alpha schedule** and **beta schedule** (see the scheduler / diffusion config in `src/*diffusion*.py`)
+- For each setting: train → sample → compute FID with `eval/image_generation_eval/fid_and_inception_score.py`
+
+We log:
+- config (alpha/beta type + key hyperparameters)
+- checkpoint id / step
+- FID score (mean over runs if repeated)
