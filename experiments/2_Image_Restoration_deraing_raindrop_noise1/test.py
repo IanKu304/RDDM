@@ -6,6 +6,12 @@ from src.residual_denoising_diffusion_pytorch import (ResidualDiffusion,
                                                       Trainer, Unet, UnetRes,
                                                       set_seed)
 
+from pathlib import Path
+
+
+
+
+
 # init 
 os.environ['CUDA_VISIBLE_DEVICES'] = ','.join(str(e) for e in [0])
 sys.stdout.flush()
@@ -92,6 +98,22 @@ else:
         input_condition=input_condition,
         input_condition_mask=input_condition_mask
     )
+
+
+## 新增資料路徑檔
+HERE = Path(__file__).resolve().parent
+folder = [
+    str(HERE / "data_gtrain" / "train_gt.flist"),
+    str(HERE / "data_gtrain" / "train_input.flist"),
+    str(HERE / "data_gtrain" / "test_gt.flist"),
+    str(HERE / "data_gtrain" / "test_input.flist"),
+]
+
+
+
+
+
+
 
 trainer = Trainer(
     diffusion,
