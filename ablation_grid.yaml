@@ -1,0 +1,29 @@
+# RDDM × GT-RAIN Ablation Config (schedule grid)
+# 用途：分工跑 beta_end / beta_scale 的 3×3 grid，統一命名與輸出 CSV
+#
+# 約定：
+# - Stage 1（粗篩）建議 steps=40000
+# - Stage 2（精跑）建議 steps=120000（只挑前 2~3 組）
+#
+# 注意：要讓下面的 grid 生效，你需要讓 train.py 支援參數：
+#   --beta_end, --beta_scale, --run_name, --steps, --seed, --amp
+# 並在 ResidualDiffusion 的 noise schedule 產生處套用 beta_end / beta_scale
+
+common:
+  dataset: GT-RAIN
+  image_size: 256
+  batch_size: 1
+  grad_accumulate_every: 2
+  seed: 10
+  sampling_timesteps: 10
+  schedule_type: linear
+  stage1_steps: 40000
+  stage2_steps: 120000
+  amp: true
+
+grid:
+  beta_end: [0.01, 0.02, 0.04]
+  beta_scale: [0.5, 1.0, 2.0]
+
+# 建議輸出命名：
+# GT-RAIN__img256__bs1__acc2__steps{steps}__schedLinear__betaEnd{beta_end}__betaScale{beta_scale}__seed{seed}

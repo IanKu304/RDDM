@@ -1,0 +1,10 @@
+member,beta_end,beta_scale,run_name_example,stage1_steps,stage2_steps
+memberA,0.01,0.5,GT-RAIN__img256__bs1__acc2__steps40000__schedLinear__betaEnd0.01__betaScale0.5__seed10,40000,120000
+memberA,0.01,1.0,GT-RAIN__img256__bs1__acc2__steps40000__schedLinear__betaEnd0.01__betaScale1.0__seed10,40000,120000
+memberA,0.01,2.0,GT-RAIN__img256__bs1__acc2__steps40000__schedLinear__betaEnd0.01__betaScale2.0__seed10,40000,120000
+memberB,0.02,0.5,GT-RAIN__img256__bs1__acc2__steps40000__schedLinear__betaEnd0.02__betaScale0.5__seed10,40000,120000
+memberB,0.02,1.0,GT-RAIN__img256__bs1__acc2__steps40000__schedLinear__betaEnd0.02__betaScale1.0__seed10,40000,120000
+memberB,0.02,2.0,GT-RAIN__img256__bs1__acc2__steps40000__schedLinear__betaEnd0.02__betaScale2.0__seed10,40000,120000
+memberC,0.04,0.5,GT-RAIN__img256__bs1__acc2__steps40000__schedLinear__betaEnd0.04__betaScale0.5__seed10,40000,120000
+memberC,0.04,1.0,GT-RAIN__img256__bs1__acc2__steps40000__schedLinear__betaEnd0.04__betaScale1.0__seed10,40000,120000
+memberC,0.04,2.0,GT-RAIN__img256__bs1__acc2__steps40000__schedLinear__betaEnd0.04__betaScale2.0__seed10,40000,120000
