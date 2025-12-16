@@ -1,0 +1,33 @@
+請使用anaconda prompt 執行以下指令
+
+# 1. 切到工作目錄
+# cd /d D:\Ian\NCKU\master2\Image_detection\Final_Report\RDDM
+
+
+# 2. 用建立環境
+conda create -n rddm python=3.10 -y
+
+# 3. 啟用環境
+conda activate rddm
+
+# 4. 下載套件 
+python -m pip install -U pip setuptools wheel
+
+# 5. 安裝 PyTorch
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+## 檢查 GPU 是否可用
+python -c "import torch; print('torch', torch.__version__); print('cuda', torch.cuda.is_available()); print('device', torch.cuda.get_device_name(0) if torch.cuda.is_available() else None)"
+
+
+#  建議加的 PATH / 設定
+git config --global core.longpaths true
+
+
+#
+pip install numpy pillow tqdm matplotlib einops opencv-python scipy scikit-image
+pip install accelerate tensorboard
+pip install lpips pytorch-fid
+pip install colorama exceptiongroup
+
+
+python -c "import accelerate; print('accelerate', accelerate.__version__)"
