@@ -6,6 +6,8 @@
 
 # 2. 用建立環境
 conda create -n rddm python=3.10 -y
+#conda activate base
+#conda env create -f install_win.yaml
 
 # 3. 啟用環境
 conda activate rddm
@@ -31,3 +33,16 @@ pip install colorama exceptiongroup
 
 
 python -c "import accelerate; print('accelerate', accelerate.__version__)"
+
+
+
+
+
+
+python gen_gtrain_flists.py ^
+  --data_root "D:\Ianku\RDDM\data" ^
+  --out_dir ".\data_gtrain" ^
+  --train_split GT-RAIN_train ^
+  --test_split GT-RAIN_val
+
+python train_ablation.py --amp --beta_schedule linear --beta_end 0.02 --beta_scale 1.0
