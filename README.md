@@ -132,53 +132,14 @@ RDDM/data/gt_rain_flists/
   test_gt.flist
 ```
 
-**Suggested script (save as `tools/make_gtrain_flists.py`)**:
-```python
-import argparse, os
-from pathlib import Path
-
-def list_pngs(p): return sorted([x for x in Path(p).rglob("*.png")])
-
-def main(data_root, out_dir, train_dir="GT-RAIN_train", test_dir="GT-RAIN_test"):
-    data_root = Path(data_root)
-    out_dir = Path(out_dir); out_dir.mkdir(parents=True, exist_ok=True)
-
-    def build_split(split_dir):
-        rainy = []
-        clean = []
-
-        for img in list_pngs(data_root / split_dir):
-            name = img.name
-            # rainy frames contain "-R-"
-            if "-R-" in name:
-                rainy.append(str(img))
-                # training/test: assume clean is "*-C-000.png" in the same folder
-                clean_name = name.replace("-R-", "-C-").split("-C-")[0] + "-C-000.png"
-                clean_path = img.with_name(clean_name)
-                clean.append(str(clean_path))
-        return rainy, clean
-
-    tr_in, tr_gt = build_split(train_dir)
-    te_in, te_gt = build_split(test_dir)
-
-    (out_dir / "train_input.flist").write_text("\n".join(tr_in), encoding="utf-8")
-    (out_dir / "train_gt.flist").write_text("\n".join(tr_gt), encoding="utf-8")
-    (out_dir / "test_input.flist").write_text("\n".join(te_in), encoding="utf-8")
-    (out_dir / "test_gt.flist").write_text("\n".join(te_gt), encoding="utf-8")
-
-    print("Saved:", out_dir)
-
-if __name__ == "__main__":
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--data_root", default="data")
-    ap.add_argument("--out_dir", default="data/gt_rain_flists")
-    args = ap.parse_args()
-    main(args.data_root, args.out_dir)
-```
-
 Run from repo root:
 ```bash
-python tools/make_gtrain_flists.py --data_root data --out_dir data/gt_rain_flists
+python gen_gtrain_flists.py ^
+  --data_root "to\your\data" ^
+  --out_dir ".\data_gtrain" ^
+  --train_split GT-RAIN_train ^
+  --test_split GT-RAIN_val
+
 ```
 
 ---
