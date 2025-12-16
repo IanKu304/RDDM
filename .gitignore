@@ -17,3 +17,7 @@ experiments/2_Image_Restoration_deraing_raindrop_noise1/data/
 *.log
 experiments/**/results/
 experiments/**/training.log
+experiments/2_Image_Restoration_deraing_raindrop_noise1/data_gtrain/test_gt.flist
+experiments/2_Image_Restoration_deraing_raindrop_noise1/data_gtrain/test_input.flist
+experiments/2_Image_Restoration_deraing_raindrop_noise1/data_gtrain/train_gt.flist
+experiments/2_Image_Restoration_deraing_raindrop_noise1/data_gtrain/train_input.flist
