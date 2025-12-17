@@ -38,3 +38,4 @@ experiments/2_Image_Restoration_deraing_raindrop_noise1/src/__pycache__/denoisin
 experiments/2_Image_Restoration_deraing_raindrop_noise1/src/__pycache__/residual_denoising_diffusion_pytorch.cpython-310.pyc
 *.flist
 *.pyc
+/experiments/2_Image_Restoration_deraing_raindrop_noise1/data_gtrain
