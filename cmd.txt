@@ -46,3 +46,12 @@ python gen_gtrain_flists.py ^
   --test_split GT-RAIN_val
 
 python train_ablation.py --amp --beta_schedule linear --beta_end 0.02 --beta_scale 1.0
+
+
+python eval_metrics.py ^
+  --gt_flist ".\data_gtrain\test_gt.flist" ^
+  --pred_dir ".\results\GT-RAIN__img256__bs1__acc2__steps120000__schedlinear__betaEnd0.02__betaScale1__seed10\test_timestep_10\ckpt_120" ^
+  --match basename --resize pred_to_gt ^
+  --lpips --fid --device cuda ^
+  --out_dir ".\results\GT-RAIN__img256__bs1__acc2__steps120000__schedlinear__betaEnd0.02__betaScale1__seed10\metrics"
+
