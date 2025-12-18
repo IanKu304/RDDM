@@ -46,3 +46,9 @@ python gen_gtrain_flists.py ^
   --test_split GT-RAIN_val
 
 python train_ablation.py --amp --beta_schedule linear --beta_end 0.02 --beta_scale 1.0
+
+
+python train_ablation.py --sampling_timesteps 10 --train_num_steps 120000 --save_and_sample_every 2000 ^
+  --seed 10 --device 0 --amp ^
+  --image_size 256 --batch_size 4 --grad_accum 2 --train_lr 8e-5 ^
+  --num_workers 0 --resume none
