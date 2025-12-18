@@ -48,6 +48,7 @@ python gen_gtrain_flists.py ^
 python train_ablation.py --amp --beta_schedule linear --beta_end 0.02 --beta_scale 1.0
 
 
+<<<<<<< HEAD
 python eval_metrics.py ^
   --gt_flist ".\data_gtrain\test_gt.flist" ^
   --pred_dir ".\results\GT-RAIN__img256__bs1__acc2__steps120000__schedlinear__betaEnd0.02__betaScale1__seed10\test_timestep_10\ckpt_120" ^
@@ -55,3 +56,9 @@ python eval_metrics.py ^
   --lpips --fid --device cuda ^
   --out_dir ".\results\GT-RAIN__img256__bs1__acc2__steps120000__schedlinear__betaEnd0.02__betaScale1__seed10\metrics"
 
+=======
+python train_ablation.py --sampling_timesteps 10 --train_num_steps 120000 --save_and_sample_every 2000 ^
+  --seed 10 --device 0 --amp ^
+  --image_size 256 --batch_size 4 --grad_accum 2 --train_lr 8e-5 ^
+  --num_workers 0 --resume none
+>>>>>>> 4cdac4504b67a79714cc019a330f0e7c3b613c53
